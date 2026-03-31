@@ -1,15 +1,22 @@
-package com.testtech.backend.domain.entity;
+package com.testtech.backend.secondary.entity;
 
-public class Question {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "questions")
+public class QuestionJpaEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String question;
+
     private String answer;
 
-    public Question(Long id, String question, String answer) {
-        this.id = id;
-        this.question = question;
-        this.answer = answer;
-    }
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryJpaEntity category;
 
     public Long getId() {
         return id;
@@ -33,5 +40,13 @@ public class Question {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public CategoryJpaEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryJpaEntity category) {
+        this.category = category;
     }
 }

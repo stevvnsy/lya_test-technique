@@ -1,4 +1,4 @@
-package com.testtech.backend.controller;
+package com.testtech.backend.primary.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

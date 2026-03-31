@@ -1,19 +1,22 @@
-package com.testtech.backend.domain.entity;
+package com.testtech.backend.secondary.entity;
+
+import jakarta.persistence.*;
 
 import java.util.List;
 
-public class Category {
+@Entity
+@Table(name = "categories")
+public class CategoryJpaEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String description;
-    private List<Question> questions;
 
-    public Category(Long id, String name, String description, List<Question> questions) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.questions = questions;
-    }
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<QuestionJpaEntity> questions;
 
     public Long getId() {
         return id;
@@ -39,11 +42,11 @@ public class Category {
         this.description = description;
     }
 
-    public List<Question> getQuestions() {
+    public List<QuestionJpaEntity> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(List<QuestionJpaEntity> questions) {
         this.questions = questions;
     }
 }
