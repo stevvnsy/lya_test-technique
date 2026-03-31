@@ -1,0 +1,8 @@
+$kind: http-request
+name: POST /api/categories
+url: "{{baseUrl}}/api/categories"
+method: POST
+body:
+  type: json
+  content: "{\"name\": \"RGPD\",\"description\": \"Protections des données\"}"
+order: 4223724053276822

@@ -1,9 +1,17 @@
 package com.testtech.backend.secondary.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "questions")
+@Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuestionJpaEntity {
 
     @Id
@@ -17,36 +25,4 @@ public class QuestionJpaEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryJpaEntity category;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public CategoryJpaEntity getCategory() {
-        return category;
-    }
-
-    public void setCategory(CategoryJpaEntity category) {
-        this.category = category;
-    }
 }

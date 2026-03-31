@@ -11,4 +11,8 @@ public interface CategoryService {
     List<Category> getAllCategories();
 
     Optional<Category> getCategoryById(Long id);
+
+    Category createCategory(Category category);
+
+    boolean existsByName(String name);
 }

@@ -1,0 +1,7 @@
+$kind: http-request
+name: GET /api/categories
+url: "{{baseUrl}}/api/categories"
+method: GET
+headers:
+  Accept: application/json
+order: 1774960281740

@@ -1,12 +1,8 @@
 package com.testtech.backend.secondary.mapper;
 
 import com.testtech.backend.domain.entity.Category;
-import com.testtech.backend.domain.entity.Question;
 import com.testtech.backend.secondary.entity.CategoryJpaEntity;
-import com.testtech.backend.secondary.entity.QuestionJpaEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class CategoryMapper {
@@ -16,14 +12,20 @@ public class CategoryMapper {
             return null;
         }
 
-        List<Question> questions = entity.getQuestions().stream()
-                .map(this::toDomainQuestion)
-                .toList();
-
-        return new Category(entity.getId(), entity.getName(), entity.getDescription(), questions);
+        return Category.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .questions(QuestionMapper.toDomainQuestions(entity.getQuestions()))
+                .build();
     }
 
-    private Question toDomainQuestion(QuestionJpaEntity entity) {
-        return new Question(entity.getId(), entity.getQuestion(), entity.getAnswer());
+    public CategoryJpaEntity toJpaEntity(Category category) {
+        return CategoryJpaEntity.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .questions(QuestionMapper.toJpaQuestions(category.getQuestions()))
+                .build();
     }
 }

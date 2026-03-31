@@ -1,6 +1,5 @@
 # Questions
 
-- Pourquoi avoir désactivé Lombok ?
 - Problème de MAJ avec docker, obligatoi de relancer en local avec intellij *(ou autre IDE)* ?
 
 # Axes d'améliorations
