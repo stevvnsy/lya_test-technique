@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ThemeToggle } from "../atoms";
+import { IconButton, ThemeToggle } from "../atoms";
 import { SearchBar } from "../molecules";
 import { cn } from "../../utils/cn";
 
@@ -10,6 +10,7 @@ interface TopbarProps {
   isSearchOpen: boolean;
   searchOverlay: ReactNode;
   actions?: ReactNode;
+  onOpenMobileSidebar?: () => void;
 }
 
 export function Topbar({
@@ -19,6 +20,7 @@ export function Topbar({
   isSearchOpen,
   searchOverlay,
   actions,
+  onOpenMobileSidebar,
 }: TopbarProps) {
   return (
     <div
@@ -29,15 +31,34 @@ export function Topbar({
       )}
     >
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center">
-        <div className="relative z-50 flex-1">
-          <SearchBar
-            value={searchValue}
-            onChange={onSearchChange}
-            onFocus={onSearchFocus}
-            placeholder="Rechercher dans toute la FAQ..."
-          />
+        <div className="flex items-center gap-3">
+          <div className="xl:hidden">
+            <IconButton onClick={onOpenMobileSidebar} aria-label="Ouvrir le menu">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-5 w-5"
+              >
+                <path d="M4 6h16" />
+                <path d="M4 12h16" />
+                <path d="M4 18h16" />
+              </svg>
+            </IconButton>
+          </div>
 
-          {isSearchOpen && searchOverlay}
+          <div className="relative z-50 flex-1">
+            <SearchBar
+              value={searchValue}
+              onChange={onSearchChange}
+              onFocus={onSearchFocus}
+              placeholder="Rechercher dans toute la FAQ..."
+            />
+
+            {isSearchOpen && searchOverlay}
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-3">

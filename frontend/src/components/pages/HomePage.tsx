@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useCategoryDrawer, useFaqSearch, useQuestionDrawer } from "../../hooks";
+import { useCategoryDrawer, useFaqSearch, useMobileSidebar, useQuestionDrawer } from "../../hooks";
 import { mockCategories } from "../../mocks/categories";
-import { ALL_CATEGORIES_ID } from "../../types/ui";
-import { SidebarCategory } from "../../types/category";
-import { SearchResult } from "../../types/search";
-import { CategoryFormValues } from "../../schemas/category.schema";
-import { QuestionFormValues } from "../../schemas/question.schema";
+import { ALL_CATEGORIES_ID, SearchResult, SidebarCategory } from "../../types";
+import { CategoryFormValues, QuestionFormValues } from "../../schemas";
 import { AppShell } from "../templates";
 import { FaqContent, SearchOverlay } from "../organisms";
 import { Button } from "../atoms";
@@ -18,6 +15,7 @@ export function HomePage() {
 
   const categoryDrawer = useCategoryDrawer();
   const questionDrawer = useQuestionDrawer();
+  const mobileSidebar = useMobileSidebar();
 
   const categories = mockCategories;
 
@@ -126,6 +124,9 @@ export function HomePage() {
         isSearchOpen={isSearchOpen}
         onOpenSearch={openSearch}
         onCloseSearch={closeSearch}
+        isMobileSidebarOpen={mobileSidebar.isOpen}
+        onOpenMobileSidebar={mobileSidebar.open}
+        onCloseMobileSidebar={mobileSidebar.close}
         searchOverlay={
           <SearchOverlay
             query={searchValue}

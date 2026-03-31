@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-import { Sidebar } from "../organisms";
+import { MobileSidebar, Sidebar, Topbar } from "../organisms";
 import { SidebarCategory } from "../../types/category";
-import { Topbar } from "../organisms/Topbar";
 
 interface AppShellProps {
   children: ReactNode;
@@ -15,6 +14,9 @@ interface AppShellProps {
   onCloseSearch: () => void;
   searchOverlay: ReactNode;
   actions?: ReactNode;
+  isMobileSidebarOpen: boolean;
+  onOpenMobileSidebar: () => void;
+  onCloseMobileSidebar: () => void;
 }
 
 export function AppShell({
@@ -29,10 +31,13 @@ export function AppShell({
   onCloseSearch,
   searchOverlay,
   actions,
+  isMobileSidebarOpen,
+  onOpenMobileSidebar,
+  onCloseMobileSidebar,
 }: AppShellProps) {
   return (
     <div className="h-screen overflow-hidden bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
-      <div className="flex h-full gap-6 p-6">
+      <div className="flex h-full gap-6 p-4 sm:p-6">
         <aside className="hidden h-full w-72 shrink-0 lg:block">
           <Sidebar
             categories={categories}
@@ -50,13 +55,22 @@ export function AppShell({
             isSearchOpen={isSearchOpen}
             searchOverlay={searchOverlay}
             actions={actions}
+            onOpenMobileSidebar={onOpenMobileSidebar}
           />
 
-          <main className="scroll-area min-h-0 flex-1 overflow-y-auto pr-1">
+          <main className="min-h-0 flex-1 overflow-y-auto pr-1">
             <div className="flex flex-col gap-8 pb-6">{children}</div>
           </main>
         </div>
       </div>
+
+      <MobileSidebar
+        isOpen={isMobileSidebarOpen}
+        onClose={onCloseMobileSidebar}
+        categories={categories}
+        activeCategoryId={activeCategoryId}
+        onSelectCategory={onSelectCategory}
+      />
 
       {isSearchOpen && (
         <button
