@@ -2,8 +2,10 @@ package com.testtech.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
+@EntityScan("com.testtech.backend.domain.entity")
 public class BackendApplication {
 
     public static void main(String[] args) {
