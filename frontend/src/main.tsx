@@ -7,7 +7,9 @@ import { ThemeProvider } from "./context/ThemeContext";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <HomePage />
+      <ThemeProvider>
+        <HomePage />
+      </ThemeProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
