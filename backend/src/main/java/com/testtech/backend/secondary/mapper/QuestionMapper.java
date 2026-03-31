@@ -1,6 +1,7 @@
 package com.testtech.backend.secondary.mapper;
 
 import com.testtech.backend.domain.entity.Question;
+import com.testtech.backend.secondary.entity.CategoryJpaEntity;
 import com.testtech.backend.secondary.entity.QuestionJpaEntity;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ public class QuestionMapper {
                 .id(entity.getId())
                 .question(entity.getQuestion())
                 .answer(entity.getAnswer())
+                .categoryId(entity.getCategory().getId())
                 .build();
     }
 
@@ -32,6 +34,7 @@ public class QuestionMapper {
                 .id(entity.getId())
                 .question(entity.getQuestion())
                 .answer(entity.getAnswer())
+                .category(CategoryJpaEntity.builder().id(entity.getCategoryId()).build())
                 .build();
     }
 

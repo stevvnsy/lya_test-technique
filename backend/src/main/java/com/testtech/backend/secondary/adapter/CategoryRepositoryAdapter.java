@@ -15,19 +15,18 @@ import java.util.Optional;
 public class CategoryRepositoryAdapter implements CategoryService {
 
     private final SpringDataCategoryRepository categoryRepository;
-    private final CategoryMapper categoryMapper;
 
     @Override
     public List<Category> getAllCategories() {
         return categoryRepository.findAll().stream()
-                .map(categoryMapper::toDomain)
+                .map(CategoryMapper::toDomain)
                 .toList();
     }
 
     @Override
     public Optional<Category> getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .map(categoryMapper::toDomain);
+                .map(CategoryMapper::toDomain);
     }
 
     @Override
@@ -37,16 +36,13 @@ public class CategoryRepositoryAdapter implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
-        category.validate();
 
         if (existsByName(category.getName())) {
             throw new IllegalArgumentException("Une catégorie avec ce nom existe déjà !");
         }
 
-        return categoryMapper.toDomain(
-                categoryRepository.save(
-                        categoryMapper.toJpaEntity(category)
-                )
+        return CategoryMapper.toDomain(
+                categoryRepository.save(CategoryMapper.toJpaEntity(category))
         );
     }
 }

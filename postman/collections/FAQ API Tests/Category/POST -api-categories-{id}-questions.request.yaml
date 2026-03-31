@@ -1,0 +1,11 @@
+$kind: http-request
+name: POST /api/categories/{id}/questions
+url: "{{baseUrl}}/api/categories/:id/questions"
+method: POST
+pathVariables:
+  id: "4"
+body:
+  type: json
+  content: '{"question":"Puis-je demander de supprimer mes données ?", "answer":
+    "Oui, en réalisant un ticket au support."}'
+order: 4456810838977884

@@ -23,6 +23,6 @@ public class QuestionJpaEntity {
     private String answer;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private CategoryJpaEntity category;
 }

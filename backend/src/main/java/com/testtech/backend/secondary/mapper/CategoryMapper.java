@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryMapper {
 
-    public Category toDomain(CategoryJpaEntity entity) {
+    public static Category toDomain(CategoryJpaEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -20,7 +20,7 @@ public class CategoryMapper {
                 .build();
     }
 
-    public CategoryJpaEntity toJpaEntity(Category category) {
+    public static CategoryJpaEntity toJpaEntity(Category category) {
         return CategoryJpaEntity.builder()
                 .id(category.getId())
                 .name(category.getName())
