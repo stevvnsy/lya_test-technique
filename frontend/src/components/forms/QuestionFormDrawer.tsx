@@ -12,6 +12,7 @@ interface QuestionFormDrawerProps {
   categories: Category[];
   initialCategoryId?: number | "";
   onSubmit: (values: QuestionFormValues) => void;
+  isSubmitting?: boolean;
 }
 
 export function QuestionFormDrawer({
@@ -20,6 +21,7 @@ export function QuestionFormDrawer({
   categories,
   initialCategoryId = "",
   onSubmit,
+  isSubmitting = false,
 }: QuestionFormDrawerProps) {
   const {
     register,
@@ -59,8 +61,8 @@ export function QuestionFormDrawer({
     onClose();
   };
 
-  const submitForm = (values: QuestionFormValues) => {
-    onSubmit(values);
+  const submitForm = async (values: QuestionFormValues) => {
+    await onSubmit(values);
     reset();
   };
 
@@ -137,7 +139,7 @@ export function QuestionFormDrawer({
           <Button variant="secondary" type="button" onClick={handleClose}>
             Annuler
           </Button>
-          <Button type="submit" disabled={!isValid}>
+          <Button type="submit" disabled={!isValid || isSubmitting} isLoading={isSubmitting}>
             Ajouter la question
           </Button>
         </div>

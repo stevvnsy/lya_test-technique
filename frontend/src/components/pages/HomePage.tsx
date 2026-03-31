@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { useCategoryDrawer, useFaqSearch, useMobileSidebar, useQuestionDrawer } from "../../hooks";
-import { mockCategories } from "../../mocks/categories";
+import {
+  useCategoriesApi,
+  useCategoryDrawer,
+  useCreateCategory,
+  useCreateQuestion,
+  useFaqSearch,
+  useMobileSidebar,
+  useQuestionDrawer,
+} from "../../hooks";
 import { ALL_CATEGORIES_ID, SearchResult, SidebarCategory } from "../../types";
 import { CategoryFormValues, QuestionFormValues } from "../../schemas";
 import { AppShell } from "../templates";
@@ -17,7 +24,10 @@ export function HomePage() {
   const questionDrawer = useQuestionDrawer();
   const mobileSidebar = useMobileSidebar();
 
-  const categories = mockCategories;
+  const createCategoryMutation = useCreateCategory();
+  const createQuestionMutation = useCreateQuestion();
+
+  const { data: categories, isLoading, error, reload } = useCategoriesApi();
 
   const {
     isSearchOpen,
@@ -100,15 +110,19 @@ export function HomePage() {
     }
   };
 
-  const handleCreateCategory = (values: CategoryFormValues) => {
-    console.log("Nouvelle catégorie", values);
+  const handleCreateCategory = async (values: CategoryFormValues) => {
+    await createCategoryMutation.mutate(values);
+    await reload();
     categoryDrawer.close();
   };
 
-  const handleCreateQuestion = (values: QuestionFormValues) => {
-    console.log("Nouvelle question", values);
+  const handleCreateQuestion = async (values: QuestionFormValues) => {
+    await createQuestionMutation.mutate(values);
+    await reload();
     questionDrawer.close();
   };
+
+  const isDataReady = categories.length > 0;
 
   return (
     <>
@@ -148,18 +162,55 @@ export function HomePage() {
           </>
         }
       >
-        <FaqContent
-          categories={categories}
-          activeCategoryId={activeCategoryId}
-          openQuestionId={openQuestionId}
-          onToggleQuestion={handleToggleQuestion}
-        />
+        {isLoading ? (
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="space-y-4">
+              <div className="h-6 w-48 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+              <div className="h-4 w-72 animate-pulse rounded bg-slate-100 dark:bg-slate-800/70" />
+              <div className="space-y-3 pt-4">
+                {[1, 2, 3].map((item) => (
+                  <div
+                    key={item}
+                    className="h-20 animate-pulse rounded-3xl bg-slate-100 dark:bg-slate-800/60"
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : error ? (
+          <section className="rounded-3xl border border-red-200 bg-white p-6 shadow-sm dark:border-red-900/50 dark:bg-slate-900">
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  Impossible de charger la FAQ
+                </h2>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{error}</p>
+              </div>
+
+              <Button onClick={() => void reload()}>Réessayer</Button>
+            </div>
+          </section>
+        ) : isDataReady ? (
+          <FaqContent
+            categories={categories}
+            activeCategoryId={activeCategoryId}
+            openQuestionId={openQuestionId}
+            onToggleQuestion={handleToggleQuestion}
+          />
+        ) : (
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Aucune catégorie disponible.
+            </p>
+          </section>
+        )}
       </AppShell>
 
       <CategoryFormDrawer
         isOpen={categoryDrawer.isOpen}
         onClose={categoryDrawer.close}
         onSubmit={handleCreateCategory}
+        isSubmitting={createCategoryMutation.isLoading}
       />
 
       <QuestionFormDrawer
@@ -168,6 +219,7 @@ export function HomePage() {
         categories={categories}
         initialCategoryId={questionDrawer.initialCategoryId}
         onSubmit={handleCreateQuestion}
+        isSubmitting={createQuestionMutation.isLoading}
       />
     </>
   );

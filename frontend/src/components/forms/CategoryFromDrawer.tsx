@@ -8,9 +8,15 @@ interface CategoryFormDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (values: CategoryFormValues) => void;
+  isSubmitting?: boolean;
 }
 
-export function CategoryFormDrawer({ isOpen, onClose, onSubmit }: CategoryFormDrawerProps) {
+export function CategoryFormDrawer({
+  isOpen,
+  onClose,
+  onSubmit,
+  isSubmitting = false,
+}: CategoryFormDrawerProps) {
   const {
     register,
     handleSubmit,
@@ -30,8 +36,8 @@ export function CategoryFormDrawer({ isOpen, onClose, onSubmit }: CategoryFormDr
     onClose();
   };
 
-  const submitForm = (values: CategoryFormValues) => {
-    onSubmit(values);
+  const submitForm = async (values: CategoryFormValues) => {
+    await onSubmit(values);
     reset();
   };
 
@@ -76,7 +82,7 @@ export function CategoryFormDrawer({ isOpen, onClose, onSubmit }: CategoryFormDr
           <Button variant="secondary" type="button" onClick={handleClose}>
             Annuler
           </Button>
-          <Button type="submit" disabled={!isValid}>
+          <Button type="submit" disabled={!isValid || isSubmitting} isLoading={isSubmitting}>
             Créer la catégorie
           </Button>
         </div>
