@@ -39,7 +39,7 @@ export function SearchOverlay({
         </p>
       </div>
 
-      <div className="max-h-[420px] overflow-y-auto p-2">
+      <div className="overlay-scroll max-h-[420px] overflow-y-auto p-2">
         {!hasQuery ? (
           <div className="rounded-2xl p-6 text-sm text-slate-500 dark:text-slate-400">
             Recherche par question, réponse ou mot-clé.

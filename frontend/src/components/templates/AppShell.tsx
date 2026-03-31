@@ -36,42 +36,44 @@ export function AppShell({
   searchOverlay,
 }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
-      <div className="flex min-h-screen gap-6 p-6">
-        <div className="hidden w-72 shrink-0 lg:block">
-          <div className="sticky top-6 h-[calc(100vh-3rem)]">
-            <Sidebar
-              categories={categories}
-              activeCategoryId={activeCategoryId}
-              onSelectCategory={onSelectCategory}
-              className="h-full"
-            />
-          </div>
-        </div>
+    <div className="h-screen overflow-hidden bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
+      <div className="flex h-full gap-6 p-6">
+        <aside className="hidden h-full w-72 shrink-0 lg:block">
+          <Sidebar
+            categories={categories}
+            activeCategoryId={activeCategoryId}
+            onSelectCategory={onSelectCategory}
+            className="h-full"
+          />
+        </aside>
 
-        <div className="flex min-w-0 flex-1 flex-col gap-6">
+        <div className="flex min-w-0 flex-1 flex-col gap-6 overflow-hidden">
           <div
             className={cn(
-              "sticky top-6 flex items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm",
-              "dark:border-slate-800 dark:bg-slate-900",
-              isSearchOpen ? "z-50" : "z-30"
+              "relative z-30 rounded-3xl border bg-white p-4 shadow-lg",
+              "border-slate-200 dark:border-slate-800 dark:bg-slate-900",
+              isSearchOpen && "z-50"
             )}
           >
-            <div className="relative z-50 flex-1">
-              <SearchBar
-                value={searchValue}
-                onChange={onSearchChange}
-                onFocus={onOpenSearch}
-                placeholder="Rechercher dans toute la FAQ..."
-              />
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative z-50 flex-1">
+                <SearchBar
+                  value={searchValue}
+                  onChange={onSearchChange}
+                  onFocus={onOpenSearch}
+                  placeholder="Rechercher dans toute la FAQ..."
+                />
 
-              {isSearchOpen && searchOverlay}
+                {isSearchOpen && searchOverlay}
+              </div>
+
+              <ThemeToggle />
             </div>
-
-            <ThemeToggle />
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col gap-6">{children}</div>
+          <main className="scroll-area min-h-0 flex-1 overflow-y-auto pr-1">
+            <div className="flex flex-col gap-8 pb-6">{children}</div>
+          </main>
         </div>
       </div>
 

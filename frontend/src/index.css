@@ -9,3 +9,107 @@
 .dark {
     color-scheme: dark;
 }
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+/* Zones scrollables de l'app */
+main,
+aside > div,
+.scroll-area {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+/* Chrome / Edge / Safari */
+main::-webkit-scrollbar,
+aside > div::-webkit-scrollbar,
+.scroll-area::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+main::-webkit-scrollbar-track,
+aside > div::-webkit-scrollbar-track,
+.scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+main::-webkit-scrollbar-thumb,
+aside > div::-webkit-scrollbar-thumb,
+.scroll-area::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+/* Hover : apparition douce visuelle */
+main:hover,
+aside > div:hover,
+.scroll-area:hover {
+    scrollbar-color: rgba(100, 116, 139, 0.45) transparent;
+}
+
+main:hover::-webkit-scrollbar-thumb,
+aside > div:hover::-webkit-scrollbar-thumb,
+.scroll-area:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.45);
+}
+
+/* Dark mode */
+.dark main:hover,
+.dark aside > div:hover,
+.dark .scroll-area:hover {
+    scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+
+.dark main:hover::-webkit-scrollbar-thumb,
+.dark aside > div:hover::-webkit-scrollbar-thumb,
+.dark .scroll-area:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.35);
+}
+
+.overlay-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.overlay-scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.overlay-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.overlay-scroll::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+}
+
+.overlay-scroll:hover {
+    scrollbar-color: rgba(100, 116, 139, 0.35) transparent;
+}
+
+.overlay-scroll:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.35);
+}
+
+.dark .overlay-scroll:hover {
+    scrollbar-color: rgba(148, 163, 184, 0.28) transparent;
+}
+
+.dark .overlay-scroll:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.28);
+}
