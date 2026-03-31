@@ -1,0 +1,7 @@
+$kind: http-request
+name: GET /api/:questions/search
+url: "{{baseUrl}}/api/questions/search?q=accéder"
+method: GET
+queryParams:
+  q: accéder
+order: 1774968822378
