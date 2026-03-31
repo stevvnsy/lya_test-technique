@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { SearchOverlay } from "./components/organisms";
+import { QuestionAccordion, SearchOverlay } from "./components/organisms";
 import { AppShell } from "./components/templates";
 
 type Question = {
@@ -28,6 +28,7 @@ function App() {
   const [activeCategoryId, setActiveCategoryId] = useState<number>(1);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [openQuestionId, setOpenQuestionId] = useState<number | null>(1);
 
   const categories: Category[] = [
     {
@@ -156,8 +157,20 @@ function App() {
     };
   }, [query]);
 
+  useEffect(() => {
+    const hasOpenQuestionInCategory = activeCategory.questions.some(
+      (question) => question.id === openQuestionId
+    );
+
+    if (!hasOpenQuestionInCategory) {
+      const firstQuestionId = activeCategory.questions[0]?.id ?? null;
+      setOpenQuestionId(firstQuestionId);
+    }
+  }, [activeCategory, openQuestionId]);
+
   const handleSelectSearchResult = (result: SearchResult) => {
     setActiveCategoryId(result.categoryId);
+    setOpenQuestionId(result.id);
     setSearchValue("");
     setIsSearchOpen(false);
   };
@@ -201,18 +214,15 @@ function App() {
 
         <div className="mt-6 flex flex-col gap-4">
           {activeCategory.questions.map((item) => (
-            <article
+            <QuestionAccordion
               key={item.id}
-              className="rounded-2xl border border-slate-200 bg-slate-50 p-5 transition-colors dark:border-slate-800 dark:bg-slate-950/50"
-            >
-              <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-                {item.question}
-              </h2>
-
-              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                {item.answer}
-              </p>
-            </article>
+              question={item.question}
+              answer={item.answer}
+              isOpen={openQuestionId === item.id}
+              onToggle={() =>
+                setOpenQuestionId((current) => (current === item.id ? null : item.id))
+              }
+            />
           ))}
         </div>
       </section>
