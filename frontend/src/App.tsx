@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Drawer, QuestionAccordion, SearchOverlay } from "./components/organisms";
 import { AppShell } from "./components/templates";
-import { Button } from "./components/atoms";
+import { Button, Input, Select, Textarea } from "./components/atoms";
 
 type Question = {
   id: number;
@@ -36,6 +36,12 @@ function App() {
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
   const [isQuestionDrawerOpen, setIsQuestionDrawerOpen] = useState(false);
   const [questionDrawerCategoryId, setQuestionDrawerCategoryId] = useState<number | "">("");
+
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryDescription, setCategoryDescription] = useState("");
+
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionAnswer, setQuestionAnswer] = useState("");
 
   const categories: Category[] = [
     {
@@ -248,6 +254,16 @@ function App() {
 
   const shouldShowOverlay = isSearchOpen;
 
+  const handleOpenCategoryDrawer = () => {
+    setCategoryName("");
+    setCategoryDescription("");
+    setIsCategoryDrawerOpen(true);
+  };
+
+  const handleCloseCategoryDrawer = () => {
+    setIsCategoryDrawerOpen(false);
+  };
+
   const handleOpenQuestionDrawer = () => {
     if (activeCategoryId !== ALL_CATEGORIES_ID) {
       setQuestionDrawerCategoryId(activeCategoryId);
@@ -255,11 +271,48 @@ function App() {
       setQuestionDrawerCategoryId("");
     }
 
+    setQuestionTitle("");
+    setQuestionAnswer("");
     setIsQuestionDrawerOpen(true);
   };
 
   const handleCloseQuestionDrawer = () => {
     setIsQuestionDrawerOpen(false);
+  };
+
+  const isCategoryFormValid =
+    categoryName.trim().length > 0 && categoryDescription.trim().length > 0;
+
+  const isQuestionFormValid =
+    questionDrawerCategoryId !== "" &&
+    questionTitle.trim().length > 0 &&
+    questionAnswer.trim().length > 0;
+
+  const handleCreateCategory = () => {
+    if (!isCategoryFormValid) {
+      return;
+    }
+
+    console.log("Nouvelle catégorie", {
+      name: categoryName,
+      description: categoryDescription,
+    });
+
+    handleCloseCategoryDrawer();
+  };
+
+  const handleCreateQuestion = () => {
+    if (!isQuestionFormValid) {
+      return;
+    }
+
+    console.log("Nouvelle question", {
+      categoryId: questionDrawerCategoryId,
+      question: questionTitle,
+      answer: questionAnswer,
+    });
+
+    handleCloseQuestionDrawer();
   };
 
   return (
@@ -286,7 +339,7 @@ function App() {
       }
       actions={
         <>
-          <Button variant="secondary" onClick={() => setIsCategoryDrawerOpen(true)}>
+          <Button variant="secondary" onClick={handleOpenCategoryDrawer}>
             Ajouter une catégorie
           </Button>
 
@@ -373,7 +426,7 @@ function App() {
 
       <Drawer
         isOpen={isCategoryDrawerOpen}
-        onClose={() => setIsCategoryDrawerOpen(false)}
+        onClose={handleCloseCategoryDrawer}
         title="Ajouter une catégorie"
         description="Crée une nouvelle catégorie pour organiser la FAQ."
       >
@@ -382,8 +435,9 @@ function App() {
             <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
               Nom de la catégorie
             </label>
-            <input
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+            <Input
+              value={categoryName}
+              onChange={(event) => setCategoryName(event.target.value)}
               placeholder="Ex: Sécurité"
             />
           </div>
@@ -392,24 +446,31 @@ function App() {
             <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
               Description
             </label>
-            <textarea
-              className="min-h-32 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+            <Textarea
+              rows={6}
+              value={categoryDescription}
+              onChange={(event) => setCategoryDescription(event.target.value)}
               placeholder="Décris le contenu de cette catégorie..."
             />
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {categoryDescription.length} caractère{categoryDescription.length > 1 ? "s" : ""}
+            </p>
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button variant="secondary" onClick={() => setIsCategoryDrawerOpen(false)}>
+            <Button variant="secondary" onClick={handleCloseCategoryDrawer}>
               Annuler
             </Button>
-            <Button>Créer la catégorie</Button>
+            <Button onClick={handleCreateCategory} disabled={!isCategoryFormValid}>
+              Créer la catégorie
+            </Button>
           </div>
         </div>
       </Drawer>
 
       <Drawer
         isOpen={isQuestionDrawerOpen}
-        onClose={() => setIsQuestionDrawerOpen(false)}
+        onClose={handleCloseQuestionDrawer}
         title="Ajouter une question"
         description="Ajoute une nouvelle question/réponse dans la FAQ."
       >
@@ -418,10 +479,10 @@ function App() {
             <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
               Catégorie
             </label>
-            <select
+
+            <Select
               value={questionDrawerCategoryId}
               onChange={(event) => setQuestionDrawerCategoryId(Number(event.target.value))}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
             >
               <option value="" disabled>
                 Sélectionner une catégorie
@@ -432,7 +493,8 @@ function App() {
                   {category.name}
                 </option>
               ))}
-            </select>
+            </Select>
+
             <p className="text-xs text-slate-500 dark:text-slate-400">
               {questionDrawerCategoryId !== ""
                 ? "La catégorie est préremplie selon votre sélection actuelle, mais vous pouvez la modifier."
@@ -444,8 +506,9 @@ function App() {
             <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
               Question
             </label>
-            <input
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+            <Input
+              value={questionTitle}
+              onChange={(event) => setQuestionTitle(event.target.value)}
               placeholder="Ex: Comment réinitialiser mon mot de passe ?"
             />
           </div>
@@ -454,17 +517,24 @@ function App() {
             <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
               Réponse
             </label>
-            <textarea
-              className="min-h-40 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+            <Textarea
+              rows={8}
+              value={questionAnswer}
+              onChange={(event) => setQuestionAnswer(event.target.value)}
               placeholder="Rédige la réponse complète..."
             />
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {questionAnswer.length} caractère{questionAnswer.length > 1 ? "s" : ""}
+            </p>
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button variant="secondary" onClick={() => setIsQuestionDrawerOpen(false)}>
+            <Button variant="secondary" onClick={handleCloseQuestionDrawer}>
               Annuler
             </Button>
-            <Button>Ajouter la question</Button>
+            <Button onClick={handleCreateQuestion} disabled={!isQuestionFormValid}>
+              Ajouter la question
+            </Button>
           </div>
         </div>
       </Drawer>
