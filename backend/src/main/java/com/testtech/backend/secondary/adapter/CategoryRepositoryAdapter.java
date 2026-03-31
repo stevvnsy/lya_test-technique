@@ -7,6 +7,7 @@ import com.testtech.backend.secondary.repository.SpringDataCategoryRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CategoryRepositoryAdapter implements CategoryService {
@@ -24,5 +25,11 @@ public class CategoryRepositoryAdapter implements CategoryService {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .map(categoryMapper::toDomain);
     }
 }
