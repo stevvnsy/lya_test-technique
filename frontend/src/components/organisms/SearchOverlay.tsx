@@ -1,20 +1,5 @@
 import { cn } from "../../utils/cn";
-
-type SearchResult = {
-  id: number;
-  question: string;
-  answer: string;
-  categoryId: number;
-  categoryName: string;
-  categoryDescription: string;
-};
-
-type SearchResultGroup = {
-  id: number;
-  name: string;
-  description: string;
-  questions: SearchResult[];
-};
+import { SearchResult, SearchResultGroup } from "../../types/search";
 
 interface SearchOverlayProps {
   query: string;

@@ -1,18 +1,11 @@
 import type { ReactNode } from "react";
-import { ThemeToggle } from "../atoms/ThemeToggle";
-import { SearchBar } from "../molecules";
 import { Sidebar } from "../organisms";
-import { cn } from "../../utils/cn";
-
-interface Category {
-  id: number;
-  name: string;
-  count?: number;
-}
+import { SidebarCategory } from "../../types/category";
+import { Topbar } from "../organisms/Topbar";
 
 interface AppShellProps {
   children: ReactNode;
-  categories: Category[];
+  categories: SidebarCategory[];
   activeCategoryId?: number;
   onSelectCategory?: (id: number) => void;
   searchValue: string;
@@ -50,31 +43,14 @@ export function AppShell({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col gap-6 overflow-hidden">
-          <div
-            className={cn(
-              "relative z-30 rounded-3xl border bg-white p-4 shadow-lg",
-              "border-slate-200 dark:border-slate-800 dark:bg-slate-900",
-              isSearchOpen && "z-50"
-            )}
-          >
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-center">
-              <div className="relative z-50 flex-1">
-                <SearchBar
-                  value={searchValue}
-                  onChange={onSearchChange}
-                  onFocus={onOpenSearch}
-                  placeholder="Rechercher dans toute la FAQ..."
-                />
-
-                {isSearchOpen && searchOverlay}
-              </div>
-
-              <div className="flex flex-wrap items-center justify-end gap-3">
-                {actions}
-                <ThemeToggle />
-              </div>
-            </div>
-          </div>
+          <Topbar
+            searchValue={searchValue}
+            onSearchChange={onSearchChange}
+            onSearchFocus={onOpenSearch}
+            isSearchOpen={isSearchOpen}
+            searchOverlay={searchOverlay}
+            actions={actions}
+          />
 
           <main className="scroll-area min-h-0 flex-1 overflow-y-auto pr-1">
             <div className="flex flex-col gap-8 pb-6">{children}</div>

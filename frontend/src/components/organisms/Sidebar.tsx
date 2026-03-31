@@ -1,14 +1,9 @@
 import { CategoryListItem } from "../molecules";
 import { cn } from "../../utils/cn";
-
-interface Category {
-  id: number;
-  name: string;
-  count?: number;
-}
+import { SidebarCategory } from "../../types/category";
 
 interface SidebarProps {
-  categories: Category[];
+  categories: SidebarCategory[];
   activeCategoryId?: number;
   onSelectCategory?: (id: number) => void;
   className?: string;
