@@ -138,11 +138,13 @@ export function HomePage() {
         }
         actions={
           <>
-            <Button variant="secondary" onClick={categoryDrawer.open}>
+            <Button id="action-add-category" variant="secondary" onClick={categoryDrawer.open}>
               Ajouter une catégorie
             </Button>
 
-            <Button onClick={handleOpenQuestionDrawer}>Ajouter une question</Button>
+            <Button id="action-add-question" onClick={handleOpenQuestionDrawer}>
+              Ajouter une question
+            </Button>
           </>
         }
       >

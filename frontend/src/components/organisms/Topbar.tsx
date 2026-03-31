@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { IconButton, ThemeToggle } from "../atoms";
-import { SearchBar } from "../molecules";
+import { ActionMenu, SearchBar } from "../molecules";
 import { cn } from "../../utils/cn";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 
@@ -51,8 +51,32 @@ export function Topbar({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-3">
-          {actions}
+        <div className="flex items-center justify-end gap-2">
+          {/* Desktop actions */}
+          <div className="hidden items-center gap-3 xl:flex">{actions}</div>
+
+          {/* Mobile actions */}
+          <div className="xl:hidden">
+            <ActionMenu
+              items={[
+                {
+                  label: "Ajouter une catégorie",
+                  onClick: () => {
+                    const btn = document.getElementById("action-add-category");
+                    btn?.click();
+                  },
+                },
+                {
+                  label: "Ajouter une question",
+                  onClick: () => {
+                    const btn = document.getElementById("action-add-question");
+                    btn?.click();
+                  },
+                },
+              ]}
+            />
+          </div>
+
           <ThemeToggle />
         </div>
       </div>
