@@ -21,6 +21,7 @@ interface AppShellProps {
   onOpenSearch: () => void;
   onCloseSearch: () => void;
   searchOverlay: ReactNode;
+  actions?: ReactNode;
 }
 
 export function AppShell({
@@ -34,6 +35,7 @@ export function AppShell({
   onOpenSearch,
   onCloseSearch,
   searchOverlay,
+  actions,
 }: AppShellProps) {
   return (
     <div className="h-screen overflow-hidden bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
@@ -55,7 +57,7 @@ export function AppShell({
               isSearchOpen && "z-50"
             )}
           >
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-center">
               <div className="relative z-50 flex-1">
                 <SearchBar
                   value={searchValue}
@@ -67,7 +69,10 @@ export function AppShell({
                 {isSearchOpen && searchOverlay}
               </div>
 
-              <ThemeToggle />
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                {actions}
+                <ThemeToggle />
+              </div>
             </div>
           </div>
 

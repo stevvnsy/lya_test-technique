@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { QuestionAccordion, SearchOverlay } from "./components/organisms";
+import { Drawer, QuestionAccordion, SearchOverlay } from "./components/organisms";
 import { AppShell } from "./components/templates";
+import { Button } from "./components/atoms";
 
 type Question = {
   id: number;
@@ -32,6 +33,9 @@ function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [openQuestionId, setOpenQuestionId] = useState<number | null>(1);
+  const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
+  const [isQuestionDrawerOpen, setIsQuestionDrawerOpen] = useState(false);
+  const [questionDrawerCategoryId, setQuestionDrawerCategoryId] = useState<number | "">("");
 
   const categories: Category[] = [
     {
@@ -82,414 +86,6 @@ function App() {
           id: 7,
           question: "Comment accéder au GitLab interne ?",
           answer: "Rendez-vous sur gitlab.entreprise.com et connectez-vous avec votre SSO.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "RH",
-      description: "Ressources humaines et vie au travail",
-      questions: [
-        {
-          id: 8,
-          question: "Comment poser des congés ?",
-          answer:
-            "Utilisez l'application RH en ligne. Les demandes doivent être soumises 2 semaines à l'avance.",
-        },
-        {
-          id: 9,
-          question: "Quelle est la politique de télétravail ?",
-          answer: "Jusqu'à 3 jours par semaine en télétravail, à valider avec votre manager.",
-        },
-        {
-          id: 10,
-          question: "Comment fonctionne la mutuelle ?",
-          answer:
-            "La mutuelle entreprise couvre 80% des frais. Les détails sont sur l'intranet RH.",
         },
       ],
     },
@@ -652,6 +248,20 @@ function App() {
 
   const shouldShowOverlay = isSearchOpen;
 
+  const handleOpenQuestionDrawer = () => {
+    if (activeCategoryId !== ALL_CATEGORIES_ID) {
+      setQuestionDrawerCategoryId(activeCategoryId);
+    } else {
+      setQuestionDrawerCategoryId("");
+    }
+
+    setIsQuestionDrawerOpen(true);
+  };
+
+  const handleCloseQuestionDrawer = () => {
+    setIsQuestionDrawerOpen(false);
+  };
+
   return (
     <AppShell
       categories={sidebarCategories}
@@ -662,7 +272,7 @@ function App() {
         setSearchValue(value);
         setIsSearchOpen(true);
       }}
-      isSearchOpen={shouldShowOverlay}
+      isSearchOpen={isSearchOpen}
       onOpenSearch={() => setIsSearchOpen(true)}
       onCloseSearch={() => setIsSearchOpen(false)}
       searchOverlay={
@@ -674,24 +284,35 @@ function App() {
           onSelectResult={handleSelectSearchResult}
         />
       }
+      actions={
+        <>
+          <Button variant="secondary" onClick={() => setIsCategoryDrawerOpen(true)}>
+            Ajouter une catégorie
+          </Button>
+
+          <Button onClick={handleOpenQuestionDrawer}>Ajouter une question</Button>
+        </>
+      }
     >
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div className="flex flex-col gap-2 border-b border-slate-200 pb-5 dark:border-slate-800">
-          <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
-            {activeCategoryId === ALL_CATEGORIES_ID ? "Vue globale" : "Catégorie sélectionnée"}
-          </p>
+        <div className="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-start sm:justify-between dark:border-slate-800">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+              {activeCategoryId === ALL_CATEGORIES_ID ? "Vue globale" : "Catégorie sélectionnée"}
+            </p>
 
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-            {activeCategoryId === ALL_CATEGORIES_ID
-              ? "Toutes les catégories"
-              : activeCategory?.name}
-          </h1>
+            <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+              {activeCategoryId === ALL_CATEGORIES_ID
+                ? "Toutes les catégories"
+                : activeCategory?.name}
+            </h1>
 
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {activeCategoryId === ALL_CATEGORIES_ID
-              ? "Retrouvez toutes les questions de la FAQ, regroupées par catégorie."
-              : activeCategory?.description}
-          </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {activeCategoryId === ALL_CATEGORIES_ID
+                ? "Retrouvez toutes les questions de la FAQ, regroupées par catégorie."
+                : activeCategory?.description}
+            </p>
+          </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-10">
@@ -749,6 +370,104 @@ function App() {
           )}
         </div>
       </section>
+
+      <Drawer
+        isOpen={isCategoryDrawerOpen}
+        onClose={() => setIsCategoryDrawerOpen(false)}
+        title="Ajouter une catégorie"
+        description="Crée une nouvelle catégorie pour organiser la FAQ."
+      >
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              Nom de la catégorie
+            </label>
+            <input
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+              placeholder="Ex: Sécurité"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              Description
+            </label>
+            <textarea
+              className="min-h-32 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+              placeholder="Décris le contenu de cette catégorie..."
+            />
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setIsCategoryDrawerOpen(false)}>
+              Annuler
+            </Button>
+            <Button>Créer la catégorie</Button>
+          </div>
+        </div>
+      </Drawer>
+
+      <Drawer
+        isOpen={isQuestionDrawerOpen}
+        onClose={() => setIsQuestionDrawerOpen(false)}
+        title="Ajouter une question"
+        description="Ajoute une nouvelle question/réponse dans la FAQ."
+      >
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              Catégorie
+            </label>
+            <select
+              value={questionDrawerCategoryId}
+              onChange={(event) => setQuestionDrawerCategoryId(Number(event.target.value))}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+            >
+              <option value="" disabled>
+                Sélectionner une catégorie
+              </option>
+
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {questionDrawerCategoryId !== ""
+                ? "La catégorie est préremplie selon votre sélection actuelle, mais vous pouvez la modifier."
+                : "Choisissez la catégorie dans laquelle ajouter la question."}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              Question
+            </label>
+            <input
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+              placeholder="Ex: Comment réinitialiser mon mot de passe ?"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              Réponse
+            </label>
+            <textarea
+              className="min-h-40 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-950/40"
+              placeholder="Rédige la réponse complète..."
+            />
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setIsQuestionDrawerOpen(false)}>
+              Annuler
+            </Button>
+            <Button>Ajouter la question</Button>
+          </div>
+        </div>
+      </Drawer>
     </AppShell>
   );
 }
