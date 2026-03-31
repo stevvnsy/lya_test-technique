@@ -21,6 +21,7 @@ type SearchResult = {
   answer: string;
   categoryId: number;
   categoryName: string;
+  categoryDescription: string;
 };
 
 const ALL_CATEGORIES_ID = 0;
@@ -555,6 +556,40 @@ function App() {
 
   const query = searchValue.trim().toLowerCase();
 
+  const groupedSearchResults = useMemo(() => {
+    if (!query) {
+      return [];
+    }
+
+    const groups = categories
+      .map((category) => {
+        const questions = category.questions
+          .filter(
+            (item) =>
+              item.question.toLowerCase().includes(query) ||
+              item.answer.toLowerCase().includes(query)
+          )
+          .map((item) => ({
+            id: item.id,
+            question: item.question,
+            answer: item.answer,
+            categoryId: category.id,
+            categoryName: category.name,
+            categoryDescription: category.description,
+          }));
+
+        return {
+          id: category.id,
+          name: category.name,
+          description: category.description,
+          questions,
+        };
+      })
+      .filter((group) => group.questions.length > 0);
+
+    return groups;
+  }, [categories, query]);
+
   const searchResults = useMemo<SearchResult[]>(() => {
     if (!query) {
       return [];
@@ -572,6 +607,7 @@ function App() {
           answer: item.answer,
           categoryId: category.id,
           categoryName: category.name,
+          categoryDescription: category.description,
         }))
     );
   }, [categories, query]);
@@ -633,6 +669,7 @@ function App() {
         <SearchOverlay
           query={searchValue}
           results={searchResults}
+          groupedResults={groupedSearchResults}
           isLoading={isSearchLoading}
           onSelectResult={handleSelectSearchResult}
         />
