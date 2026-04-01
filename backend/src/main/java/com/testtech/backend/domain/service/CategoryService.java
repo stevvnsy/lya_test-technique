@@ -1,18 +1,37 @@
 package com.testtech.backend.domain.service;
 
 import com.testtech.backend.domain.entity.Category;
+import com.testtech.backend.domain.port.CategoryPersistencePort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public interface CategoryService {
-    List<Category> getAllCategories();
+@RequiredArgsConstructor
+public class CategoryService {
 
-    Optional<Category> getCategoryById(Long id);
+    private final CategoryPersistencePort categoryPersistencePort;
 
-    Category createCategory(Category category);
+    public List<Category> getAllCategories() {
+        return categoryPersistencePort.getAllCategories();
+    }
 
-    boolean existsByName(String name);
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryPersistencePort.getCategoryById(id);
+    }
+
+    public Category createCategory(Category category) {
+        if (existsByName(category.getName())) {
+            throw new IllegalArgumentException("Une catégorie avec ce nom existe déjà !");
+        }
+
+        return categoryPersistencePort.createCategory(category);
+    }
+
+    public boolean existsByName(String name) {
+        return categoryPersistencePort.existsByName(name);
+    }
+
 }

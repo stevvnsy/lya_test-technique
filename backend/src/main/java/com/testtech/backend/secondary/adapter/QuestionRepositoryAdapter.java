@@ -1,7 +1,7 @@
 package com.testtech.backend.secondary.adapter;
 
 import com.testtech.backend.domain.entity.Question;
-import com.testtech.backend.domain.service.QuestionService;
+import com.testtech.backend.domain.port.QuestionPersistencePort;
 import com.testtech.backend.secondary.mapper.QuestionMapper;
 import com.testtech.backend.secondary.repository.SpringDataQuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +12,10 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionRepositoryAdapter implements QuestionService {
+public class QuestionRepositoryAdapter implements QuestionPersistencePort {
 
     private final SpringDataQuestionRepository questionRepository;
 
-    @Override
     public Question addQuestionToCategory(Question request) {
 
         return QuestionMapper.toDomainQuestion(
@@ -24,12 +23,11 @@ public class QuestionRepositoryAdapter implements QuestionService {
         );
     }
 
-    @Override
-    public Optional<List<Question>> searchQuestions(String query) {
-        if (query == null || query.isBlank()) {
-            return Optional.of(QuestionMapper.toDomainQuestions(questionRepository.findAll()));
-        }
+    public Optional<List<Question>> getAllQuestions() {
+        return Optional.of(QuestionMapper.toDomainQuestions(questionRepository.findAll()));
+    }
 
+    public Optional<List<Question>> searchQuestions(String query) {
         return Optional.of(QuestionMapper.toDomainQuestions(questionRepository.findAllByQuestionContainingIgnoreCase(query)));
     }
 }

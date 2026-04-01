@@ -1,7 +1,7 @@
 package com.testtech.backend.secondary.adapter;
 
 import com.testtech.backend.domain.entity.Category;
-import com.testtech.backend.domain.service.CategoryService;
+import com.testtech.backend.domain.port.CategoryPersistencePort;
 import com.testtech.backend.secondary.mapper.CategoryMapper;
 import com.testtech.backend.secondary.repository.SpringDataCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class CategoryRepositoryAdapter implements CategoryService {
+public class CategoryRepositoryAdapter implements CategoryPersistencePort {
 
     private final SpringDataCategoryRepository categoryRepository;
 
@@ -36,11 +36,6 @@ public class CategoryRepositoryAdapter implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
-
-        if (existsByName(category.getName())) {
-            throw new IllegalArgumentException("Une catégorie avec ce nom existe déjà !");
-        }
-
         return CategoryMapper.toDomain(
                 categoryRepository.save(CategoryMapper.toJpaEntity(category))
         );
