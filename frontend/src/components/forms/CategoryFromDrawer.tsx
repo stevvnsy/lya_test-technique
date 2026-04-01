@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Textarea } from "../atoms";
 import { Drawer } from "../organisms";
 import { type CategoryFormValues, categorySchema } from "../../schemas";
+import { useEffect } from "react";
+import { ApiError, ApiValidationErrorResponse } from "../../api/client";
 
 interface CategoryFormDrawerProps {
   isOpen: boolean;
@@ -21,6 +23,8 @@ export function CategoryFormDrawer({
     register,
     handleSubmit,
     reset,
+    setError,
+    clearErrors,
     formState: { errors, isValid },
   } = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
@@ -31,14 +35,46 @@ export function CategoryFormDrawer({
     },
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      reset({
+        name: "",
+        description: "",
+      });
+      clearErrors();
+    }
+  }, [isOpen, reset, clearErrors]);
+
   const handleClose = () => {
     reset();
     onClose();
   };
 
   const submitForm = async (values: CategoryFormValues) => {
-    await onSubmit(values);
-    reset();
+    try {
+      clearErrors();
+      await onSubmit(values);
+      reset();
+    } catch (error) {
+      if (error instanceof ApiError) {
+        const details = error.details as ApiValidationErrorResponse | undefined;
+        const fieldErrors = details?.errors;
+
+        if (fieldErrors?.name) {
+          setError("name", {
+            type: "server",
+            message: fieldErrors.name,
+          });
+        }
+
+        if (fieldErrors?.description) {
+          setError("description", {
+            type: "server",
+            message: fieldErrors.description,
+          });
+        }
+      }
+    }
   };
 
   return (

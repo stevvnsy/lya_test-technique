@@ -5,6 +5,7 @@ import { Button, Input, Select, Textarea } from "../atoms";
 import { Drawer } from "../organisms";
 import type { Category } from "../../types";
 import { type QuestionFormValues, questionSchema } from "../../schemas";
+import { ApiError, ApiValidationErrorResponse } from "../../api/client";
 
 interface QuestionFormDrawerProps {
   isOpen: boolean;
@@ -29,6 +30,8 @@ export function QuestionFormDrawer({
     reset,
     setValue,
     watch,
+    setError,
+    clearErrors,
     formState: { errors, isValid },
   } = useForm<QuestionFormValues>({
     resolver: zodResolver(questionSchema),
@@ -48,7 +51,7 @@ export function QuestionFormDrawer({
         answer: "",
       });
     }
-  }, [initialCategoryId, isOpen, reset]);
+  }, [initialCategoryId, isOpen, reset, clearErrors]);
 
   const selectedCategoryId = watch("categoryId");
 
@@ -62,8 +65,37 @@ export function QuestionFormDrawer({
   };
 
   const submitForm = async (values: QuestionFormValues) => {
-    await onSubmit(values);
-    reset();
+    try {
+      clearErrors();
+      await onSubmit(values);
+      reset();
+    } catch (error) {
+      if (error instanceof ApiError) {
+        const details = error.details as ApiValidationErrorResponse | undefined;
+        const fieldErrors = details?.errors;
+
+        if (fieldErrors?.categoryId) {
+          setError("categoryId", {
+            type: "server",
+            message: fieldErrors.categoryId,
+          });
+        }
+
+        if (fieldErrors?.question) {
+          setError("question", {
+            type: "server",
+            message: fieldErrors.question,
+          });
+        }
+
+        if (fieldErrors?.answer) {
+          setError("answer", {
+            type: "server",
+            message: fieldErrors.answer,
+          });
+        }
+      }
+    }
   };
 
   return (

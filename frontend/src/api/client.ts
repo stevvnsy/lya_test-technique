@@ -1,3 +1,11 @@
+export interface ApiValidationErrorResponse {
+  error?: string;
+  message?: string;
+  errors?: Record<string, string>;
+  timestamp?: string;
+  status?: number;
+}
+
 export class ApiError extends Error {
   status: number;
   details?: unknown;
