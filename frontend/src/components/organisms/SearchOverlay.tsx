@@ -1,5 +1,5 @@
 import { cn } from "../../utils/cn";
-import { SearchResult, SearchResultGroup } from "../../types/search";
+import { SearchResult, SearchResultGroup } from "../../types";
 
 interface SearchOverlayProps {
   query: string;

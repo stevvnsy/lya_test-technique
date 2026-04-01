@@ -10,3 +10,8 @@
 ## Fun Facts
 
 - J'ai préféré grâce à ce tests, écrire du JAVA plutôt que tu PHP 🙂
+
+TODO
+
+- Test pour github (commit by step)
+- Modifier adapter back pour que ca soit une interface et que la logique metier soit dans le service domain

@@ -1,19 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
+import { Button } from "../atoms";
+import { CategoryFormDrawer, QuestionFormDrawer } from "../forms";
+import { FaqContent, SearchOverlay } from "../organisms";
+import { AppShell } from "../templates";
 import {
   useCategoriesApi,
+  useCategoryById,
   useCategoryDrawer,
   useCreateCategory,
   useCreateQuestion,
-  useFaqSearch,
   useMobileSidebar,
   useQuestionDrawer,
+  useQuestionsSearch,
 } from "../../hooks";
-import { ALL_CATEGORIES_ID, SearchResult, SidebarCategory } from "../../types";
-import { CategoryFormValues, QuestionFormValues } from "../../schemas";
-import { AppShell } from "../templates";
-import { FaqContent, SearchOverlay } from "../organisms";
-import { Button } from "../atoms";
-import { CategoryFormDrawer, QuestionFormDrawer } from "../forms";
+import { ALL_CATEGORIES_ID, type SearchResult, type SidebarCategory } from "../../types";
+import type { CategoryFormValues, QuestionFormValues } from "../../schemas";
 
 export function HomePage() {
   const [searchValue, setSearchValue] = useState("");
@@ -30,14 +31,22 @@ export function HomePage() {
   const { data: categories, isLoading, error, reload } = useCategoriesApi();
 
   const {
+    data: activeCategoryFromApi,
+    isLoading: isCategoryLoading,
+    error: categoryError,
+  } = useCategoryById({
+    categoryId: activeCategoryId === ALL_CATEGORIES_ID ? null : activeCategoryId,
+    enabled: activeCategoryId !== ALL_CATEGORIES_ID,
+  });
+
+  const {
     isSearchOpen,
     isSearchLoading,
     searchResults,
     groupedSearchResults,
     openSearch,
     closeSearch,
-  } = useFaqSearch({
-    categories,
+  } = useQuestionsSearch({
     searchValue,
   });
 
@@ -57,29 +66,42 @@ export function HomePage() {
     [categories]
   );
 
-  const activeCategory = useMemo(
-    () =>
-      activeCategoryId === ALL_CATEGORIES_ID
-        ? null
-        : (categories.find((category) => category.id === activeCategoryId) ?? categories[0]),
-    [activeCategoryId, categories]
-  );
+  const displayedCategories = useMemo(() => {
+    if (activeCategoryId === ALL_CATEGORIES_ID) {
+      return categories;
+    }
+
+    return activeCategoryFromApi ? [activeCategoryFromApi] : [];
+  }, [activeCategoryId, categories, activeCategoryFromApi]);
 
   const allQuestions = useMemo(
     () =>
-      categories.flatMap((category) =>
+      displayedCategories.flatMap((category) =>
         category.questions.map((question) => ({
           ...question,
           categoryId: category.id,
           categoryName: category.name,
         }))
       ),
-    [categories]
+    [displayedCategories]
   );
 
   useEffect(() => {
-    const currentQuestions =
-      activeCategoryId === ALL_CATEGORIES_ID ? allQuestions : (activeCategory?.questions ?? []);
+    if (!categories.length) {
+      return;
+    }
+
+    const isValidActiveCategory =
+      activeCategoryId === ALL_CATEGORIES_ID ||
+      categories.some((category) => category.id === activeCategoryId);
+
+    if (!isValidActiveCategory) {
+      setActiveCategoryId(ALL_CATEGORIES_ID);
+    }
+  }, [categories, activeCategoryId]);
+
+  useEffect(() => {
+    const currentQuestions = allQuestions;
 
     const hasOpenQuestionInView = currentQuestions.some(
       (question) => question.id === openQuestionId
@@ -89,7 +111,7 @@ export function HomePage() {
       const firstQuestionId = currentQuestions[0]?.id ?? null;
       setOpenQuestionId(firstQuestionId);
     }
-  }, [activeCategoryId, activeCategory, allQuestions, openQuestionId]);
+  }, [allQuestions, openQuestionId]);
 
   const handleSelectSearchResult = (result: SearchResult) => {
     setActiveCategoryId(result.categoryId);
@@ -122,7 +144,9 @@ export function HomePage() {
     questionDrawer.close();
   };
 
-  const isDataReady = categories.length > 0;
+  const showGlobalView = activeCategoryId === ALL_CATEGORIES_ID;
+  const showContentLoading = isLoading || (!showGlobalView && isCategoryLoading);
+  const contentError = error || categoryError;
 
   return (
     <>
@@ -152,17 +176,15 @@ export function HomePage() {
         }
         actions={
           <>
-            <Button id="action-add-category" variant="secondary" onClick={categoryDrawer.open}>
+            <Button variant="secondary" onClick={categoryDrawer.open}>
               Ajouter une catégorie
             </Button>
 
-            <Button id="action-add-question" onClick={handleOpenQuestionDrawer}>
-              Ajouter une question
-            </Button>
+            <Button onClick={handleOpenQuestionDrawer}>Ajouter une question</Button>
           </>
         }
       >
-        {isLoading ? (
+        {showContentLoading ? (
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div className="space-y-4">
               <div className="h-6 w-48 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
@@ -177,32 +199,26 @@ export function HomePage() {
               </div>
             </div>
           </section>
-        ) : error ? (
+        ) : contentError ? (
           <section className="rounded-3xl border border-red-200 bg-white p-6 shadow-sm dark:border-red-900/50 dark:bg-slate-900">
             <div className="space-y-4">
               <div>
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                   Impossible de charger la FAQ
                 </h2>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{error}</p>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{contentError}</p>
               </div>
 
               <Button onClick={() => void reload()}>Réessayer</Button>
             </div>
           </section>
-        ) : isDataReady ? (
+        ) : (
           <FaqContent
-            categories={categories}
-            activeCategoryId={activeCategoryId}
+            categories={displayedCategories}
+            activeCategoryId={showGlobalView ? ALL_CATEGORIES_ID : activeCategoryId}
             openQuestionId={openQuestionId}
             onToggleQuestion={handleToggleQuestion}
           />
-        ) : (
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Aucune catégorie disponible.
-            </p>
-          </section>
         )}
       </AppShell>
 

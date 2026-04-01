@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Textarea } from "../atoms";
 import { Drawer } from "../organisms";
-import { type CategoryFormValues, categorySchema } from "../../schemas/category.schema";
+import { type CategoryFormValues, categorySchema } from "../../schemas";
 
 interface CategoryFormDrawerProps {
   isOpen: boolean;

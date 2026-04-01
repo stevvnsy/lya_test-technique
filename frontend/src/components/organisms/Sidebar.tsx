@@ -1,6 +1,6 @@
 import { CategoryListItem } from "../molecules";
 import { cn } from "../../utils/cn";
-import { SidebarCategory } from "../../types/category";
+import { SidebarCategory } from "../../types";
 
 interface SidebarProps {
   categories: SidebarCategory[];

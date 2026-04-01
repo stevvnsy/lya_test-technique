@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { createQuestion } from "../api/questions";
-import type { QuestionFormValues } from "../schemas";
-import { appToast } from "../utils/toast";
+import { createQuestion } from "../../api/questions";
+import type { QuestionFormValues } from "../../schemas";
+import { appToast } from "../../utils/toast";
 
 export function useCreateQuestion() {
   const [isLoading, setIsLoading] = useState(false);

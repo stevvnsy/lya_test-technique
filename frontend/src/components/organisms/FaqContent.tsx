@@ -1,6 +1,5 @@
 import { QuestionAccordion } from "./QuestionAccordion";
-import type { Category } from "../../types/category";
-import { ALL_CATEGORIES_ID } from "../../types/ui";
+import { ALL_CATEGORIES_ID, type Category } from "../../types";
 
 interface FaqContentProps {
   categories: Category[];

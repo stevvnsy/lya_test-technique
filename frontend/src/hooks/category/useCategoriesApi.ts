@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getCategories } from "../api/categories";
-import type { Category } from "../types";
-import { appToast } from "../utils/toast";
+import { getCategories } from "../../api/categories";
+import type { Category } from "../../types";
+import { appToast } from "../../utils/toast";
 
 export function useCategoriesApi() {
   const [data, setData] = useState<Category[]>([]);

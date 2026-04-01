@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { createCategory } from "../api/categories";
-import type { CategoryFormValues } from "../schemas";
-import { appToast } from "../utils/toast";
+import { createCategory } from "../../api/categories";
+import type { CategoryFormValues } from "../../schemas";
+import { appToast } from "../../utils/toast";
 
 export function useCreateCategory() {
   const [isLoading, setIsLoading] = useState(false);

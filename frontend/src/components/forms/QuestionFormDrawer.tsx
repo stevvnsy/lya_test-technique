@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Select, Textarea } from "../atoms";
 import { Drawer } from "../organisms";
-import type { Category } from "../../types/category";
-import { type QuestionFormValues, questionSchema } from "../../schemas/question.schema";
+import type { Category } from "../../types";
+import { type QuestionFormValues, questionSchema } from "../../schemas";
 
 interface QuestionFormDrawerProps {
   isOpen: boolean;

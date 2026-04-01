@@ -1,6 +1,6 @@
 import { cn } from "../../utils/cn";
 import { Sidebar } from "./Sidebar";
-import type { SidebarCategory } from "../../types/category";
+import type { SidebarCategory } from "../../types";
 
 interface MobileSidebarProps {
   isOpen: boolean;

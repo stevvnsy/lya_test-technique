@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { MobileSidebar, Sidebar, Topbar } from "../organisms";
-import { SidebarCategory } from "../../types/category";
+import { SidebarCategory } from "../../types";
 
 interface AppShellProps {
   children: ReactNode;
