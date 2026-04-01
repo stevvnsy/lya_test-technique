@@ -1,7 +1,6 @@
 import { type Id, toast, type ToastOptions } from "react-toastify";
 
 const baseOptions: ToastOptions = {
-  closeOnClick: false,
   pauseOnHover: true,
   pauseOnFocusLoss: true,
 };
