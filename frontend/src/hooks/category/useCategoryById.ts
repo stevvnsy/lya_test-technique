@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getCategoryById } from "../../api/categories";
 import type { Category } from "../../types";
 
@@ -12,52 +12,39 @@ export function useCategoryById({ categoryId, enabled = true }: UseCategoryByIdP
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!enabled || categoryId == null) {
       setData(null);
       setIsLoading(false);
       setError(null);
-      return;
+      return null;
     }
 
-    let isMounted = true;
+    setIsLoading(true);
+    setError(null);
 
-    const load = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const category = await getCategoryById(categoryId);
-
-        if (!isMounted) {
-          return;
-        }
-
-        setData(category);
-      } catch (error) {
-        if (!isMounted) {
-          return;
-        }
-
-        setError(error instanceof Error ? error.message : "Impossible de charger la catégorie.");
-        setData(null);
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    void load();
-
-    return () => {
-      isMounted = false;
-    };
+    try {
+      const category = await getCategoryById(categoryId);
+      setData(category);
+      return category;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Impossible de charger la catégorie.");
+      setData(null);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
   }, [categoryId, enabled]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   return {
     data,
     isLoading,
     error,
+    reload: load,
+    setData,
   };
 }

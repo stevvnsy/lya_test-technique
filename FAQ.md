@@ -16,3 +16,4 @@ TODO
 - Test pour github (commit by step)
 - Modifier adapter back pour que ca soit une interface et que la logique metier soit dans le service domain
 - Ajouter des contraintes back supplémentaires
+- MAJ questions après création

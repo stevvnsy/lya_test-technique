@@ -1,15 +1,23 @@
 import { cn } from "../../utils/cn";
 
 interface QuestionAccordionProps {
+  questionId: string;
   question: string;
   answer: string;
   isOpen: boolean;
   onToggle: () => void;
 }
 
-export function QuestionAccordion({ question, answer, isOpen, onToggle }: QuestionAccordionProps) {
+export function QuestionAccordion({
+  questionId,
+  question,
+  answer,
+  isOpen,
+  onToggle,
+}: QuestionAccordionProps) {
   return (
     <div
+      id={questionId}
       className={cn(
         "overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm transition-all duration-200",
         "dark:border-slate-800 dark:bg-slate-950/50"

@@ -61,13 +61,14 @@ export function FaqContent({
               </div>
 
               <div className="flex flex-col gap-4">
-                {category.questions.map((item) => (
+                {category.questions.map((question) => (
                   <QuestionAccordion
-                    key={item.id}
-                    question={item.question}
-                    answer={item.answer}
-                    isOpen={openQuestionId === item.id}
-                    onToggle={() => onToggleQuestion(item.id)}
+                    questionId={`question-${question.id}`}
+                    key={question.id}
+                    question={question.question}
+                    answer={question.answer}
+                    isOpen={openQuestionId === question.id}
+                    onToggle={() => onToggleQuestion(question.id)}
                   />
                 ))}
               </div>
@@ -75,13 +76,14 @@ export function FaqContent({
           ))
         ) : (
           <div className="flex flex-col gap-4">
-            {activeCategory?.questions.map((item) => (
+            {activeCategory?.questions.map((question) => (
               <QuestionAccordion
-                key={item.id}
-                question={item.question}
-                answer={item.answer}
-                isOpen={openQuestionId === item.id}
-                onToggle={() => onToggleQuestion(item.id)}
+                questionId={`question-${question.id}`}
+                key={question.id}
+                question={question.question}
+                answer={question.answer}
+                isOpen={openQuestionId === question.id}
+                onToggle={() => onToggleQuestion(question.id)}
               />
             ))}
           </div>

@@ -34,6 +34,8 @@ export function HomePage() {
     data: activeCategoryFromApi,
     isLoading: isCategoryLoading,
     error: categoryError,
+    reload: reloadActiveCategory,
+    setData: setActiveCategoryFromApi,
   } = useCategoryById({
     categoryId: activeCategoryId === ALL_CATEGORIES_ID ? null : activeCategoryId,
     enabled: activeCategoryId !== ALL_CATEGORIES_ID,
@@ -101,7 +103,17 @@ export function HomePage() {
   }, [categories, activeCategoryId]);
 
   useEffect(() => {
+    const isCategoryDetailView = activeCategoryId !== ALL_CATEGORIES_ID;
+
+    if (isCategoryDetailView && isCategoryLoading) {
+      return;
+    }
+
     const currentQuestions = allQuestions;
+
+    if (!currentQuestions.length) {
+      return;
+    }
 
     const hasOpenQuestionInView = currentQuestions.some(
       (question) => question.id === openQuestionId
@@ -111,13 +123,24 @@ export function HomePage() {
       const firstQuestionId = currentQuestions[0]?.id ?? null;
       setOpenQuestionId(firstQuestionId);
     }
-  }, [allQuestions, openQuestionId]);
+  }, [activeCategoryId, isCategoryLoading, allQuestions, openQuestionId]);
 
   const handleSelectSearchResult = (result: SearchResult) => {
     setActiveCategoryId(result.categoryId);
     setOpenQuestionId(result.id);
     setSearchValue("");
     closeSearch();
+
+    setTimeout(() => {
+      const element = document.getElementById(`question-${result.id}`);
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 100);
   };
 
   const handleToggleQuestion = (questionId: number) => {
@@ -141,6 +164,15 @@ export function HomePage() {
   const handleCreateQuestion = async (values: QuestionFormValues) => {
     await createQuestionMutation.mutate(values);
     await reload();
+
+    if (activeCategoryId !== ALL_CATEGORIES_ID && values.categoryId === activeCategoryId) {
+      const refreshedCategory = await reloadActiveCategory();
+
+      if (refreshedCategory) {
+        setActiveCategoryFromApi(refreshedCategory);
+      }
+    }
+
     questionDrawer.close();
   };
 
